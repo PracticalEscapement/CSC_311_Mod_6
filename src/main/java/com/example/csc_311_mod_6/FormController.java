@@ -33,7 +33,7 @@ public class FormController {
 
         setValidation(firstName, firstNameError, "^[A-Za-z]{2,25}$", val -> isFirstNameValid = val);
         setValidation(lastName, lastNameError, "^[A-Za-z]{2,25}$", val -> isLastNameValid = val);
-        setValidation(email, emailError, "^[a-zA-Z0-9._%+-]+@farmingdale\\.edu$", val -> isEmailValid = val);
+        setValidation(email, emailError, "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(edu|com)$", val -> isEmailValid = val);
         setValidation(dateOfBirth, dateOfBirthError, "^(0[1-9]|1[0-2])/([0][1-9]|[12][0-9]|3[01])/\\d{4}$", val -> isDateOfBirthValid = val);
         setValidation(zipCode, zipCodeError, "^\\d{5}$", val -> isZipCodeValid = val);
     }
