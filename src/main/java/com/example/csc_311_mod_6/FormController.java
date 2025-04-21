@@ -8,11 +8,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class FormController {
     // Fields
     @FXML private TextField firstName, lastName, email, dateOfBirth, zipCode;
 
     // Errors for each field
+    @FXML
     private Label firstNameError, lastNameError, emailError, dateOfBirthError, zipCodeError;
     private boolean isFirstNameValid, isLastNameValid, isEmailValid, isDateOfBirthValid, isZipCodeValid;
 
@@ -34,16 +38,21 @@ public class FormController {
         setValidation(zipCode, zipCodeError, "^\\d{5}$", val -> isZipCodeValid = val);
     }
 
-    private void setValidation(TextField field, Label errorLabel, String pattern, java.util.function.Consumer<Boolean> validitySetter) {
+    private void setValidation(TextField field, Label errorLabel, String regex, java.util.function.Consumer<Boolean> validitySetter) {
+        Pattern pattern = Pattern.compile(regex);
+
         field.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
             if (!isNowFocused) {
-                boolean valid = field.getText().matches(pattern);
+                Matcher matcher = pattern.matcher(field.getText());
+                boolean valid = matcher.matches();
+
                 errorLabel.setText(valid ? "" : "Invalid input.");
                 validitySetter.accept(valid);
                 checkAllValid();
             }
         });
     }
+
 
     private void checkAllValid() {
         addButton.setDisable(!(isFirstNameValid && isLastNameValid && isEmailValid && isDateOfBirthValid && isZipCodeValid));
@@ -62,7 +71,12 @@ public class FormController {
         dateOfBirth.clear();
         zipCode.clear();
 
-        isFirstNameValid = isLastNameValid = isEmailValid = isDateOfBirthValid = isZipCodeValid = false;
+        isFirstNameValid = false;
+        isLastNameValid = false;
+        isEmailValid = false;
+        isDateOfBirthValid = false;
+        isZipCodeValid = false;
+
         checkAllValid();
     }
 
