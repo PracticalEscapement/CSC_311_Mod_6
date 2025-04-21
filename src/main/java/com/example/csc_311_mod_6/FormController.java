@@ -11,6 +11,11 @@ import javafx.scene.control.TextField;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+/**
+ * Controller class for managing the form functionality.
+ * Handles user input validation, adding users to a list, and enabling/disabling the Add button.
+ */
 public class FormController {
     // Fields
     @FXML private TextField firstName, lastName, email, dateOfBirth, zipCode;
@@ -18,6 +23,8 @@ public class FormController {
     // Errors for each field
     @FXML
     private Label firstNameError, lastNameError, emailError, dateOfBirthError, zipCodeError;
+
+    // If all the field inputs are valid allow the add button to work
     private boolean isFirstNameValid, isLastNameValid, isEmailValid, isDateOfBirthValid, isZipCodeValid;
 
     @FXML private ListView<String> listView;
@@ -27,6 +34,9 @@ public class FormController {
     @FXML
     private final ObservableList<String> addedUsers = FXCollections.observableArrayList();
 
+    /**
+     * Initializes the controller. Sets up validation for all input fields and binds the ListView to the added users list.
+     */
     @FXML
     public void initialize() {
         listView.setItems(addedUsers);
@@ -38,6 +48,14 @@ public class FormController {
         setValidation(zipCode, zipCodeError, "^\\d{5}$", val -> isZipCodeValid = val);
     }
 
+    /**
+     * Sets up validation for a given TextField.
+     *
+     * @param field The TextField to validate.
+     * @param errorLabel The Label to display validation errors.
+     * @param regex The regular expression to validate the input.
+     * @param validitySetter A Consumer to set the validity flag for the field.
+     */
     private void setValidation(TextField field, Label errorLabel, String regex, java.util.function.Consumer<Boolean> validitySetter) {
         Pattern pattern = Pattern.compile(regex);
 
@@ -53,11 +71,18 @@ public class FormController {
         });
     }
 
-
+    /**
+     * Checks if all input fields are valid and enables/disables the Add button accordingly.
+     */
     private void checkAllValid() {
         addButton.setDisable(!(isFirstNameValid && isLastNameValid && isEmailValid && isDateOfBirthValid && isZipCodeValid));
     }
 
+
+
+    /**
+     * Checks if all input fields are valid and enables/disables the Add button accordingly.
+     */
     @FXML
     private void handleAdd() {
         if (addButton.isDisabled()) return;
